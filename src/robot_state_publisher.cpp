@@ -72,8 +72,7 @@ void RobotStatePublisher::setJointMimicMap(const urdf::Model& model)
   // get exclusive access for writing
   boost::unique_lock<boost::shared_mutex> lock(mimic_mtx_);
   mimic_.clear();
-  for (std::map<std::string, boost::shared_ptr<urdf::Joint> >::const_iterator i = model.joints_.begin();
-       i != model.joints_.end(); i++)
+  for (std::map<std::string, JointPtr>::const_iterator i = model.joints_.begin(); i != model.joints_.end(); i++)
   {
     if (i->second->mimic)
     {
@@ -120,7 +119,7 @@ void RobotStatePublisher::onURDFSwap(const std::string& link_name)
   segments_.clear();
   // walk the tree and add segments to segments_
   addChildren(getTree().getRootSegment());
-  boost::shared_ptr<const urdf::Model> urdf_ptr = getUrdfPtr();
+  ConstUrdfPtr urdf_ptr{ getUrdfPtr() };
   if (urdf_ptr)
   {
     setJointMimicMap(*urdf_ptr);

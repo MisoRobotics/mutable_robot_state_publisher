@@ -48,8 +48,12 @@ using namespace std;
 using namespace ros;
 using namespace KDL;
 
+#if ROS_VERSION_MINIMUM(1, 14, 0)
+#include <memory>
+typedef std::shared_ptr<sensor_msgs::JointState const> JointStateConstPtr;
+#else
 typedef boost::shared_ptr<sensor_msgs::JointState const> JointStateConstPtr;
-
+#endif
 namespace mutable_robot_state_publisher
 {
 
@@ -66,7 +70,7 @@ public:
   ~JointStateListener();
 
 private:
-  void callbackJointState(const JointStateConstPtr& state);
+  void callbackJointState(const sensor_msgs::JointState& state);
   void callbackFixedJoint(const ros::TimerEvent& e);
   void callbackSaveUrdf(const ros::TimerEvent& e);
 
