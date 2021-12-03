@@ -34,6 +34,8 @@
 #ifndef ROBOT_KDL_TREE_H_
 #define ROBOT_KDL_TREE_H_
 
+#include <memory>
+
 #include <mutable_robot_state_publisher/robot_urdf.h>
 
 namespace robot_kdl_tree
@@ -45,9 +47,13 @@ namespace robot_kdl_tree
 class RobotKDLTree : public robot_urdf::RobotURDF
 {
 public:
+#if ROS_VERSION_MINIMUM(1, 14, 0)
+  typedef std::shared_ptr<RobotKDLTree> Ptr;
+  typedef std::shared_ptr<KDL::Tree> KDLTreePtr;
+#else
   typedef boost::shared_ptr<RobotKDLTree> Ptr;
   typedef boost::shared_ptr<KDL::Tree> KDLTreePtr;
-
+#endif
   static Ptr create()
   {
     Ptr pRobotKDLTree = Ptr(new RobotKDLTree());

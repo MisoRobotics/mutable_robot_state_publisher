@@ -38,7 +38,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
 #include <boost/thread/shared_mutex.hpp>
 
@@ -130,8 +129,15 @@ public:
   BOOST_SIGNAL_DEFINE(Swapped, void, (const std::string& link_name));
 
 public:
+#if ROS_VERSION_MINIMUM(1, 14, 0)
+  typedef std::shared_ptr<urdf::Joint> JointPtr;
+  typedef std::shared_ptr<urdf::Model> UrdfPtr;
+  typedef std::shared_ptr<const urdf::Model> ConstUrdfPtr;
+#else
+  typedef boost::shared_ptr<urdf::Joint> JointPtr;
   typedef boost::shared_ptr<urdf::Model> UrdfPtr;
   typedef boost::shared_ptr<const urdf::Model> ConstUrdfPtr;
+#endif
 
   RobotURDF();
 
