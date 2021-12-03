@@ -37,6 +37,10 @@
 #ifndef ROBOT_STATE_PUBLISHER_H
 #define ROBOT_STATE_PUBLISHER_H
 
+#include <map>
+#include <memory>
+#include <string>
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/shared_mutex.hpp>
 
@@ -49,7 +53,11 @@
 #include <tf/transform_broadcaster.h>
 #include <urdf/model.h>
 
-typedef std::map<std::string, boost::shared_ptr<urdf::JointMimic> > MimicMap;
+#if ROS_VERSION_MINIMUM(1, 14, 0)
+typedef std::map<std::string, std::shared_ptr<urdf::JointMimic>> MimicMap;
+#else
+typedef std::map<std::string, boost::shared_ptr<urdf::JointMimic>> MimicMap;
+#endif
 namespace mutable_robot_state_publisher
 {
 

@@ -96,9 +96,9 @@ void JointStateListener::callbackFixedJoint(const ros::TimerEvent& e)
   state_publisher_.publishFixedTransforms(tf_prefix_);
 }
 
-void JointStateListener::callbackJointState(const JointStateConstPtr& state)
+void JointStateListener::callbackJointState(const sensor_msgs::JointState& state)
 {
-  if (state->name.size() != state->position.size())
+  if (state.name.size() != state.position.size())
   {
     ROS_ERROR("Robot state publisher received an invalid joint state vector");
     return;
@@ -116,32 +116,32 @@ void JointStateListener::callbackJointState(const JointStateConstPtr& state)
 
   // determine least recently published joint
   ros::Time last_published = now;
-  for (unsigned int i = 0; i < state->name.size(); i++)
+  for (unsigned int i = 0; i < state.name.size(); i++)
   {
-    ros::Time t = last_publish_time_[state->name[i]];
+    ros::Time t = last_publish_time_[state.name[i]];
     last_published = (t < last_published) ? t : last_published;
   }
   // note: if a joint was seen for the first time,
   //       then last_published is zero.
 
   // check if we need to publish
-  if (state->header.stamp >= last_published + publish_interval_)
+  if (state.header.stamp >= last_published + publish_interval_)
   {
     // get joint positions from state message
     map<string, double> joint_positions;
-    for (unsigned int i = 0; i < state->name.size(); i++)
-      joint_positions.insert(make_pair(state->name[i], state->position[i]));
+    for (unsigned int i = 0; i < state.name.size(); i++)
+      joint_positions.insert(make_pair(state.name[i], state.position[i]));
 
     if (!state_publisher_.getJointMimicPositions(joint_positions))
     {
       ROS_WARN("Failed to update mimic joint transforms due to URDF update.");
     }
 
-    state_publisher_.publishTransforms(joint_positions, state->header.stamp, tf_prefix_);
+    state_publisher_.publishTransforms(joint_positions, state.header.stamp, tf_prefix_);
 
     // store publish time in joint map
-    for (unsigned int i = 0; i < state->name.size(); i++)
-      last_publish_time_[state->name[i]] = state->header.stamp;
+    for (unsigned int i = 0; i < state.name.size(); i++)
+      last_publish_time_[state.name[i]] = state.header.stamp;
   }
 }
 
