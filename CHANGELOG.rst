@@ -2,8 +2,8 @@
 Changelog for package robot_state_publisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.1.0 (2022-01-12)
+------------------
 * RAD-95: Update for noetic
   Update package dependencies and add conditional to CMakeLists.txt.
 * RAD-79: Migrate to Python 3
