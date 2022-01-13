@@ -2,6 +2,18 @@
 Changelog for package robot_state_publisher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.0 (2022-01-12)
+------------------
+* RAD-95: Update for noetic
+  Update package dependencies and add conditional to CMakeLists.txt.
+* RAD-79: Migrate to Python 3
+  Update to work with Python 3 and Noetic.
+* Merge pull request `#3 <https://github.com/MisoRobotics/mutable_robot_state_publisher/issues/3>`_ from MisoRobotics/master
+  Merge master back into develop
+* Merge pull request `#1 <https://github.com/MisoRobotics/mutable_robot_state_publisher/issues/1>`_ from MisoRobotics/release/2.0.0
+  Release/2.0.0
+* Contributors: Nikita Kosolobov, Ryan Sinnet
+
 2.0.0 (2018-07-30)
 ------------------
 * Renaming to mutable_robot_state_publisher so can be run in parallel with original version.
