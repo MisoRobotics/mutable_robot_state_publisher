@@ -47,6 +47,7 @@
 #include <ros/ros.h>
 #include <tf/tf.h>
 #include <tf/transform_broadcaster.h>
+#include <tf2_ros/static_transform_broadcaster.h>
 #include <urdf/model.h>
 
 typedef std::map<std::string, boost::shared_ptr<urdf::JointMimic> > MimicMap;
@@ -99,6 +100,7 @@ private:
 
   std::map<std::string, SegmentPair> segments_, segments_fixed_;
   tf::TransformBroadcaster tf_broadcaster_;
+  tf2_ros::StaticTransformBroadcaster static_tf_broadcaster_;
 
   bool initialized_;
   bool urdf_changed_;

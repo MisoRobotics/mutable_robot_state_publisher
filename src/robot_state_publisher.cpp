@@ -221,7 +221,7 @@ void RobotStatePublisher::publishFixedTransforms(const std::string& tf_prefix)
     tf_transform.child_frame_id_ = tf::resolve(tf_prefix, seg->second.tip);
     tf_transforms.push_back(tf_transform);
   }
-  tf_broadcaster_.sendTransform(tf_transforms);
+  static_tf_broadcaster_.sendTransform(tf_transforms);
 }
 
 }  // namespace mutable_robot_state_publisher

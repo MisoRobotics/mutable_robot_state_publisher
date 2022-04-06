@@ -5,7 +5,7 @@ add_compile_options(--std=c++17)
 
 find_package(orocos_kdl REQUIRED)
 find_package(catkin REQUIRED
-  COMPONENTS roscpp rosconsole rostime tf tf_conversions kdl_parser
+  COMPONENTS roscpp rosconsole rostime tf tf_conversions tf2_ros kdl_parser
   cmake_modules std_msgs urdf
 )
 find_package(Eigen3 REQUIRED)
@@ -21,7 +21,7 @@ generate_messages(DEPENDENCIES
 catkin_package(
   LIBRARIES ${PROJECT_NAME}_solver
   INCLUDE_DIRS include
-  DEPENDS roscpp rosconsole rostime tf tf_conversions kdl_parser orocos_kdl
+  DEPENDS roscpp rosconsole rostime tf tf_conversions tf2_ros kdl_parser orocos_kdl
 )
 
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})

@@ -64,9 +64,6 @@ JointStateListener::JointStateListener(const urdf::Model& m) : state_publisher_(
   // subscribe to joint state
   joint_state_sub_ = n.subscribe("joint_states", 1, &JointStateListener::callbackJointState, this);
 
-  // trigger to publish fixed joints
-  pub_timer_ = n_tilde.createTimer(publish_interval_, &JointStateListener::callbackFixedJoint, this);
-
   // Only one node should set the robot_description parameter:
   bool set_robot_description = false;
   n_tilde.param<bool>("set_robot_description", set_robot_description, false);
@@ -91,7 +88,7 @@ void JointStateListener::callbackSaveUrdf(const ros::TimerEvent& e)
   state_publisher_.setRobotDescriptionIfChanged();
 }
 
-void JointStateListener::callbackFixedJoint(const ros::TimerEvent& e)
+void JointStateListener::publishFixedTransforms()
 {
   state_publisher_.publishFixedTransforms(tf_prefix_);
 }
@@ -168,6 +165,7 @@ int main(int argc, char** argv)
   model.initParam("robot_base_description");
   JointStateListener state_publisher(model);
   state_publisher.init();
+  state_publisher.publishFixedTransforms();
   ros::spin();
 
   return 0;
