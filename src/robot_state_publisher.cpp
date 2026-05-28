@@ -152,16 +152,19 @@ void RobotStatePublisher::addChildren(const KDL::SegmentMap::const_iterator segm
   for (unsigned int i = 0; i < children.size(); i++)
   {
     const KDL::Segment& child = GetTreeElementSegment(children[i]->second);
-    SegmentPair s(GetTreeElementSegment(children[i]->second), root, child.getName());
-    if (child.getJoint().getType() == KDL::Joint::None)
+    if (!root.empty())  // skip KDL virtual root — it has no real TF frame name
     {
-      segments_fixed_.insert(make_pair(child.getJoint().getName(), s));
-      ROS_DEBUG("Adding fixed segment from %s to %s", root.c_str(), child.getName().c_str());
-    }
-    else
-    {
-      segments_.insert(make_pair(child.getJoint().getName(), s));
-      ROS_DEBUG("Adding moving segment from %s to %s", root.c_str(), child.getName().c_str());
+      SegmentPair s(GetTreeElementSegment(children[i]->second), root, child.getName());
+      if (child.getJoint().getType() == KDL::Joint::None)
+      {
+        segments_fixed_.insert(make_pair(child.getJoint().getName(), s));
+        ROS_DEBUG("Adding fixed segment from %s to %s", root.c_str(), child.getName().c_str());
+      }
+      else
+      {
+        segments_.insert(make_pair(child.getJoint().getName(), s));
+        ROS_DEBUG("Adding moving segment from %s to %s", root.c_str(), child.getName().c_str());
+      }
     }
     addChildren(children[i]);
   }
@@ -207,10 +210,15 @@ void RobotStatePublisher::publishFixedTransforms(const std::string& tf_prefix)
     return;
   }
 
+  ros::Time stamp = ros::Time::now() + ros::Duration(0.5);  // future publish by 0.5 seconds
+  if (stamp == last_fixed_publish_stamp_)
+    return;
+  last_fixed_publish_stamp_ = stamp;
+
   ROS_DEBUG("Publishing transforms for fixed joints");
   std::vector<tf::StampedTransform> tf_transforms;
   tf::StampedTransform tf_transform;
-  tf_transform.stamp_ = ros::Time::now() + ros::Duration(0.5);  // future publish by 0.5 seconds
+  tf_transform.stamp_ = stamp;
 
   // loop over all fixed segments
   for (map<string, SegmentPair>::const_iterator seg = segments_fixed_.begin(); seg != segments_fixed_.end(); seg++)

@@ -113,6 +113,7 @@ private:
   MimicMap mimic_;
   boost::shared_mutex mimic_mtx_;
   ros::Publisher urdf_update_pub_;
+  ros::Time last_fixed_publish_stamp_;
 };
 
 }  // namespace mutable_robot_state_publisher
